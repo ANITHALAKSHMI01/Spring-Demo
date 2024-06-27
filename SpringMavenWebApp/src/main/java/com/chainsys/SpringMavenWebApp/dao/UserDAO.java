@@ -10,4 +10,7 @@ public interface UserDAO
 	public void updateUser(User user);
 	public void deleteUser(User user);
 //	public String selectUser(Integer id);
+//	public List<User> selectUser(User user);
+	public List<User> selectUser(String search);
+	public List<User> getUser();
 }

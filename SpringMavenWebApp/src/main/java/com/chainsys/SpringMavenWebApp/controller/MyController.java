@@ -7,13 +7,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import com.chainsys.SpringMavenWebApp.dao.UserDAOImpl;
+import com.chainsys.SpringMavenWebApp.dao.UserDAO;
 import com.chainsys.SpringMavenWebApp.model.User;
 @Controller
 public class MyController 
 {
 	@Autowired
-	UserDAOImpl userImpl;
+	UserDAO userDAO;
 	
 	@RequestMapping("/home")
 	public String home()
@@ -29,13 +29,13 @@ public class MyController
 		user.setPhoneNo(phoneNo);
 		user.setPassword(password);
 		user.setStatus(1);
-		userImpl.saveUser(user);
+		userDAO.saveUser(user);
 		return "success.jsp";
 	}
 	@GetMapping("/view")
 	public String viewAllUsers(Model model)
 	{
-		List<User> users=userImpl.getAllUsers();
+		List<User> users=userDAO.getAllUsers();
 		model.addAttribute("users",users);
 		return "userTable.jsp";
 	}
@@ -45,8 +45,8 @@ public class MyController
 		User user=new User();
 		user.setId(id);
 		user.setPhoneNo(phoneNo);
-		userImpl.updateUser(user);
-		List<User> users=userImpl.getAllUsers();
+		userDAO.updateUser(user);
+		List<User> users=userDAO.getAllUsers();
 		model.addAttribute("users",users);
 		return "userTable.jsp";
 	}
@@ -56,18 +56,18 @@ public class MyController
 		User user=new User();
 		user.setId(id);
 		user.setStatus(0);
-		userImpl.deleteUser(user);
-		List<User> users=userImpl.getAllUsers();
+		userDAO.deleteUser(user);
+		List<User> users=userDAO.getAllUsers();
 		model.addAttribute("users",users);
 		return "userTable.jsp";
 	}
-//	@GetMapping("/search")
-//	public String selectUser(@RequestParam("id") Integer id,Model model)
-//	{
-//		userImpl.selectUser(id);
-//		model.addAttribute("users",id);
-//		return "userTable.jsp";
-//	}
+	@GetMapping("/search")
+	public String selectUser(@RequestParam("searchData") String search,Model model)
+	{
+		List<User> users=userDAO.selectUser(search);
+		model.addAttribute("users",users);
+		return "userTable.jsp";
+	}
 //	@RequestMapping("/success")
 //	public String success()
 //	{

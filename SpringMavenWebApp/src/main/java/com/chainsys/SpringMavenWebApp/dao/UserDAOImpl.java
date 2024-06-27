@@ -22,7 +22,7 @@ public class UserDAOImpl implements UserDAO
 	@Override
 	public List<User> getAllUsers()
 	{
-		String select="select id,name,phone_no,email from user";
+		String select="select id,name,phone_no,email from user where status=1";
 		List<User> userList=jdbcTemplate.query(select, new UserMapper());
 		return userList;
 	}
@@ -33,25 +33,46 @@ public class UserDAOImpl implements UserDAO
 		Object[] params= {user.getPhoneNo(),user.getId()};
 		jdbcTemplate.update(update,params);
 	}
-//	@Override
-//	public void deleteUser(User user) 
-//	{
-//		String update="update user set status=? where id=?";
-//		Object[] params= {user.getStatus(),user.getId()};
-//		jdbcTemplate.update(update,params);
-//	}
 	@Override
-	public void deleteUser(User user)
+	public void deleteUser(User user) 
 	{
-		String delete="delete from user where id=?";
-		Object[] params= {user.getId()};
-		jdbcTemplate.update(delete,params);
+		String update="update user set status=? where id=?";
+		Object[] params= {user.getStatus(),user.getId()};
+		jdbcTemplate.update(update,params);
 	}
 //	@Override
-//	public User selectUser(Integer id)
+//	public void deleteUser(User user)
 //	{
-//		String select="select id,name,phone_no,email from user where id=?";
-//		User userList=(List<User>) jdbcTemplate.queryForObject(select, new UserMapper(), params);
+//		String delete="delete from user where id=?";
+//		Object[] params= {user.getId()};
+//		jdbcTemplate.update(delete,params);
+//	}
+//	@Override
+//	public String selectUser(Integer id)
+//	{
+//		String select="select name from user where id=?";
+//		String user=jdbcTemplate.queryForObject(select,String.class, id);
+//		return user;
+//	}
+//	@Override
+//	public List<User> selectUser(User user) 
+//	{
+//		String select="select id,name,phone_no,email from user where id=? && status=1";
+//		Object[] params= {user.getId()};
+//		List<User> userList=jdbcTemplate.query(select, new UserMapper(), params);
 //		return userList;
 //	}
+	@Override
+	public List<User> getUser()
+	{
+		String select="select phone_no,email from user where status=1";
+		List<User> userList=jdbcTemplate.query(select, new UserMapper());
+		return userList;
+	}
+	@Override
+	public List<User> selectUser(String search) {
+		String select=String.format("select id,name,phone_no,email from user where (id like '%%%s%%' or name like '%%%s%%' or email like '%%%s%%' or phone_no like '%%%s%%')  and status=1 ",search,search,search,search);
+		List<User> userList=jdbcTemplate.query(select, new UserMapper());
+		return userList;
+	}
 }

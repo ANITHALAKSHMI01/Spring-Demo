@@ -12,7 +12,7 @@
 <body>
 <h1>User Details</h1>
 <form action="/search" method="get">
-	<input type="search" name="id" placeholder="Search">
+	<input type="search" name="searchData" placeholder="Search">
 </form><br><br>
 <table border="1px" cellspacing="0px">
 	<thead>
@@ -27,8 +27,12 @@
 	</thead>
 	<tbody>
 		<%List<User> users=(ArrayList<User>)request.getAttribute("users");
-		for (User user : users)
-  		{
+		 if (users != null && !users.isEmpty())
+		  {
+			 try
+			  {
+				for (User user : users)
+  				{
 		%>
 		<tr>
 			<td><%=user.getId() %></td>
@@ -48,8 +52,26 @@
 				</form>
 			</td>
 		</tr>
-		<%} %>
+		<%
+			   }
+				  		
+				  }
+				  catch (Exception e) 
+				  { 
+						e.printStackTrace();
+				  }
+			  } 
+				else 
+				{
+	        %>
+	        <tr>
+	            <td colspan="15">No Records found</td>
+	        </tr>
+	         <%
+	        }
+	        %>
 	</tbody>
+	
 </table>
 </body>
 </html>
